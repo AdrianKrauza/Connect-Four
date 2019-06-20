@@ -1,0 +1,112 @@
+@import "setting";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    background: $color-bg;
+}
+#win{
+    color:white;
+    font-size: 60px;
+    text-align: center;
+    margin-top:20px;
+    height: 75px;
+}
+#board {
+    width: $boardX * $boardSize + 10*$boardX;
+    height: $boardY * $boardSize + 10*$boardY;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    background: $boardColor;
+    background: radial-gradient(circle, transparent, transparent 40px, #0b4986 20px, #007fff 23px, #1f90ff 23px, #1f90ff) center top/90px 90px;
+    border-radius: 2%;
+
+    div {
+        float: left;
+        width: $boardSize+ 10;
+        height: $boardSize+ 10;
+    }
+
+    @for $g from 1 through ($boardY + 1) {
+        .boardHover {
+            &:nth-child(#{$g}) {
+                left: unquote("calc((#{$g - 1} * #{$boardSize+ 10}) + (50vw -  #{($boardX * $boardSize + 10*$boardX) / 2} ) )");
+                height: $boardY * $boardSize + 10*$boardY;
+                position: absolute;
+                z-index: 99;
+            }
+        }
+    }
+
+    .animated {
+        animation-duration: 0.5s;
+        animation-name: bounce;
+        animation-fill-mode: forwards;
+        position: absolute;
+        z-index: -1;
+        transform: translate3d(0, -550px, 0);
+        border-radius: 100%;
+    }
+
+    .red {
+        background-image: radial-gradient(circle, #f01f1f, #d82425, #c02929, #a82b2c, #902d2d);
+        @extend .animated;
+    }
+
+    .yellow  {
+        background-image: radial-gradient(circle, #ffff00, #eaea1f, #d6d62b, #c2c233, #aeae38);
+        @extend .animated;
+    }
+
+}
+
+
+@for $y from 0 through ($boardY) {
+    @for $x from 1 through ($boardX) {
+        .boardHover:nth-child(#{$x}):hover~div {
+            @for $f from 0 through ($boardY) {
+                &:nth-child(#{(($boardX * $y) + $x + 28) - (($y *  $f) * $boardX ) + $boardX }) {
+                    &.hover {
+                        &.redHover {
+                            &.can {
+                                background: rgba(230, 12, 12, 0.4);
+                            }
+                            background: rgba(185, 58, 58, 0.212);
+                        }
+
+                        &.yellowHover {
+                            &.can {
+                                background: rgba(187, 187, 35,0.4);
+                            }
+
+                            background: rgba(185, 185, 71, 0.1);
+                        }
+                    }
+
+                    border-radius: 100%;
+                }
+            }
+        }
+    }
+}
+
+@keyframes bounce {
+    40% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    60% {
+        transform: translate3d(0, -50px, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}
